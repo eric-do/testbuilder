@@ -176,3 +176,36 @@ describe('Maestro', function() {
     }
   });
 });
+
+describe('China UnionPay', function() {
+  // China UnionPay always has a prefix of 622126-622925, 624-626, or 6282-6288 and a length of 16-19.
+  // China UnionPay always has a prefix of 622126-622925, 624-626, or 6282-6288 and a length of 16-19.
+  let prefixMinA = 622126;
+  let prefixMaxA = 622925;
+  let prefixMinB = 624;
+  let prefixMaxB = 626;
+  let prefixMinC = 6282;
+  let prefixMaxC = 6288;
+  let lengthMin = 16;
+  let lengthMax = 19;
+
+  testRange(prefixMinA, prefixMaxA);
+  testRange(prefixMinB, prefixMaxB);
+  testRange(prefixMinC, prefixMaxC);
+
+  // First prefix range
+  function testRange(min, max) {
+    for (let prefix = min; prefix <= max; prefix++) {
+      for (let len = lengthMin; len <= lengthMax; len++) {
+        let testName = 'has a prefix of ' + prefix + ' and a length of ' + len;
+        let prefixArr = prefix.toString().split('');
+        let arrBuffer = (new Array(len - prefixArr.length)).fill('0');
+        let testCard = prefixArr.concat(arrBuffer).join('');
+
+        it(testName, function() {
+          detectNetwork(testCard).should.equal('China UnionPay');
+      });
+      }
+    }
+  }
+});

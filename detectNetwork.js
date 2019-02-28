@@ -14,32 +14,29 @@
 // MasterCard always has a prefix of 51, 52, 53, 54, or 55 and a length of 16.
 // Discover always has a prefix of 6011, 644-649, or 65, and a length of 16 or 19.
 // Maestro always has a prefix of 5018, 5020, 5038, or 6304, and a length of 12-19.
+// China UnionPay always has a prefix of 622126-622925, 624-626, or 6282-6288 and a length of 16-19.
+// Switch always has a prefix of 4903, 4905, 4911, 4936, 564182, 633110, 6333, or 6759 and a length of 16, 18, or 19.
+// Switch and Visa seem to have some overlapping card numbers - in any apparent conflict, you should choose the network with the longer prefix.
 
 var detectNetwork = function(cardNumber) {
   let prefix = cardNumber.slice(0,2);
   return getNetwork(cardNumber);
 };
 
-var validateCard = function(cardNumber) {
-  // This function takes a string and returns true/false
-    // True if card is valid
-    // False if card in invalid
-  // Invalid errors
-    // Invalid characters in string
-    // TODO
-
-
-}
-
 var getNetwork = function(cardNumber) {
   let network = '';
   let length = cardNumber.length;
+
+  // Regular expressions for each card network
+  // Great resource: http://gamon.webfactional.com/regexnumericrangegenerator/
   let dcRegex = /(38|39)/;
   let amexRegex = /(34|37)/;
   let visaRegex = /(4)/;
   let mcRegex = /(51|52|53|54|55)/;
   let discRegex = /(6011|65|64[4-9])/;
   let maestroRegex = /(5018|5020|5038|6304)/;
+  let cuRegex = /(62212[6-9]|6221[3-9][0-9]|622[2-8][0-9]{2}|6229[01][0-9]|62292[0-5]|62[4-6]|628[2-8])/;
+  let switchRegex = /(4903|4905|4911|4936|564182|633110|6333|6759)/;
 
   if (cardNumber.search(dcRegex) === 0 && length === 14) {
      network = 'Diner\'s Club';
@@ -53,27 +50,9 @@ var getNetwork = function(cardNumber) {
      network = 'Discover';
   }  else if (cardNumber.search(maestroRegex) === 0 && (length >= 12 && length <= 19)) {
      network = 'Maestro';
+  }  else if (cardNumber.search(cuRegex) === 0 && (length >= 16 && length <= 19)) {
+     network = 'China UnionPay';
   }
+
   return network;
 }
-
-function assertEqual(actual, expected, testName) {
-  if (actual === expected) {
-    console.log('Passed');
-  } else {
-    console.log('FAILED [' + testName + '] expected ' + expected + ' but got ' + actual);
-  }
-}
-
-detectNetwork('38345678901234');
-detectNetwork('39345678901234');
-detectNetwork('343456789012345');
-detectNetwork('373456789012345');
-detectNetwork('4123456789012');
-detectNetwork('4123456789012345');
-detectNetwork('4123456789012345678');
-detectNetwork('5112345678901234');
-detectNetwork('5212345678901234');
-detectNetwork('5312345678901234');
-detectNetwork('5412345678901234');
-detectNetwork('5512345678901234');
