@@ -19,11 +19,8 @@
 // Switch and Visa seem to have some overlapping card numbers - in any apparent conflict, you should choose the network with the longer prefix.
 
 var detectNetwork = function(cardNumber) {
-  let prefix = cardNumber.slice(0,2);
-  return getNetwork(cardNumber);
-};
-
-var getNetwork = function(cardNumber) {
+  // Define regex match for each prefix
+  // Search cardNumber for prefixes (prefixes should be found at index 0)
   let network = '';
   let length = cardNumber.length;
 
