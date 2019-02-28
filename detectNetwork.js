@@ -37,21 +37,26 @@ var getNetwork = function(cardNumber) {
   let maestroRegex = /(5018|5020|5038|6304)/;
   let cuRegex = /(62212[6-9]|6221[3-9][0-9]|622[2-8][0-9]{2}|6229[01][0-9]|62292[0-5]|62[4-6]|628[2-8])/;
   let switchRegex = /(4903|4905|4911|4936|564182|633110|6333|6759)/;
+  let visaSwitchOverlap = /(4903|4905|4911|4936)/
 
   if (cardNumber.search(dcRegex) === 0 && length === 14) {
      network = 'Diner\'s Club';
-  }  else if (cardNumber.search(amexRegex) === 0 && length === 15) {
+  } else if (cardNumber.search(amexRegex) === 0 && length === 15) {
   	 network = 'American Express';
-  }  else if (cardNumber.search(visaRegex) === 0 && (length === 13 || length === 16 || length === 19)) {
+  } else if (cardNumber.search(visaSwitchOverlap) === 0 && (length === 16 || length === 19)) {
+     network = 'Switch';
+  } else if (cardNumber.search(visaRegex) === 0 && (length === 13 || length === 16 || length === 19)) {
      network = 'Visa';
-  }  else if (cardNumber.search(mcRegex) === 0 && length === 16) {
+  } else if (cardNumber.search(mcRegex) === 0 && length === 16) {
      network = 'MasterCard';
-  }  else if (cardNumber.search(discRegex) === 0 && (length === 16 || length === 19)) {
+  } else if (cardNumber.search(discRegex) === 0 && (length === 16 || length === 19)) {
      network = 'Discover';
-  }  else if (cardNumber.search(maestroRegex) === 0 && (length >= 12 && length <= 19)) {
+  } else if (cardNumber.search(maestroRegex) === 0 && (length >= 12 && length <= 19)) {
      network = 'Maestro';
-  }  else if (cardNumber.search(cuRegex) === 0 && (length >= 16 && length <= 19)) {
+  } else if (cardNumber.search(cuRegex) === 0 && (length >= 16 && length <= 19)) {
      network = 'China UnionPay';
+  } else if (cardNumber.search(switchRegex) === 0 && (length === 16 || length === 18 || length === 19)) {
+    network = 'Switch';
   }
 
   return network;

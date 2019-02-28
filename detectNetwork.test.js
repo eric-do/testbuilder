@@ -41,6 +41,7 @@ var FILL_ME_IN = 'Fill this value in';
     }
   });
 });*/
+
 describe('Diner\'s Club', function() {
   // Be careful, tests can have bugs too...
 
@@ -208,4 +209,24 @@ describe('China UnionPay', function() {
       }
     }
   }
+});
+
+describe('Switch', function() {
+// Switch always has a prefix of 4903, 4905, 4911, 4936, 564182, 633110, 6333, or 6759 and a length of 16, 18, or 19.
+// Switch and Visa seem to have some overlapping card numbers - in any apparent conflict, you should choose the network with the longer prefix.
+  let prefArr = [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759];
+  let lengthArr = [16, 18, 19];
+
+  prefArr.forEach(function(prefix){
+    lengthArr.forEach(function(length) {
+      let testName = 'has a prefix of ' + prefix + ' and a length of ' + length;
+      let prefixArr = prefix.toString().split('');
+      let arrBuffer = (new Array(length - prefixArr.length)).fill('0');
+      let testCard = prefixArr.concat(arrBuffer).join('');
+
+      it(testName, function() {
+        detectNetwork(testCard).should.equal('Switch');
+      });
+    });
+  });
 });
